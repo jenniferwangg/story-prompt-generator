@@ -4,11 +4,10 @@ from PIL import ImageTk,Image
 import pymongo 
 import datetime
 from tkinter import messagebox
-from AddBook import *
-from DeleteBook import *
-from ViewBooks import *
-from IssueBook import *
-from ReturnBook import *
+from genprompt import *
+from deleteprompt import *
+from viewprompt import *
+from storeprompt import *
 
 
 uri = "mongodb+srv://<username>:<password>@sandbox.ynusx.mongodb.net/admin?retryWrites=true&w=majority"
