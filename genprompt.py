@@ -1,21 +1,28 @@
 from tkinter import *
 from PIL import ImageTk,Image
 from tkinter import messagebox
-import pymysql
+#import pymysql
+import pymongo
 
-# Add your own database name and password here to reflect in the code
-mypass = "root"
-mydatabase="db"
+uri = "mongodb+srv://<username>:<password>@sandbox.ynusx.mongodb.net/admin?retryWrites=true&w=majority"
+myclient = pymongo.MongoClient(uri)
+database = myclient["endsem"]
 
-con = pymysql.connect(host="localhost",user="root",password=mypass,database=mydatabase)
-cur = con.cursor()
 
-# Enter Table Names here
 issueTable = "books_issued" 
 bookTable = "books"
     
-#List To store all Book IDs
 allBid = [] 
+
+def add_prompt(sr, name, author, date, price, category, status = "yes"):
+    collection = database["book_list"]
+    dict1 = {"serial number": sr, "name": name, "author": author, "date": date, "price":price, "category": category, "available":status}
+    x = collection.count_documents({"$expr":{"$eq":["$serial number",sr]}})
+    if x==0:
+        x = collection.insert_one(dict1)
+        return True
+    else:
+        return False
 
 def issue():
     

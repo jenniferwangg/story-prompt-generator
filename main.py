@@ -1,18 +1,40 @@
 from tkinter import *
 from PIL import ImageTk,Image
-import pymysql
+#import pymysql
+import pymongo 
+import datetime
 from tkinter import messagebox
 from AddBook import *
 from DeleteBook import *
 from ViewBooks import *
 from IssueBook import *
 from ReturnBook import *
-# Add your own database name and password here to reflect in the code
-mypass = "root"
-mydatabase="db"
 
-con = pymysql.connect(host="localhost",user="root",password=mypass,database=mydatabase)
-cur = con.cursor()
+
+uri = "mongodb+srv://<username>:<password>@sandbox.ynusx.mongodb.net/admin?retryWrites=true&w=majority"
+myclient = pymongo.MongoClient(uri)
+database = myclient["endsem"]
+
+#mypass = "root"
+#mydatabase="db"
+
+#con = pymysql.connect(host="localhost",user="root",password=mypass,database=mydatabase)
+#cur = con.cursor()
+
+def register_insert(username, password):
+    collection = database["login"]
+    login_info = {"username" : username, "password": password}
+    x= collection.count_documents({"$expr":{"$eq":["$username",str(username)]}})
+    if x==1:
+        return True
+    elif x==0:
+        x = collection.insert_one(login_info)
+        return False
+
+
+def login_data(username,password):
+    x = database.login.count_documents({"$expr":{"$and":[{"$eq":["$username",str(username)]},{"$eq":["$password",str(password)]}]}})
+    return x
 
 root = Tk()
 root.title("Library")

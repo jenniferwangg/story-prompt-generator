@@ -1,21 +1,14 @@
 from tkinter import *
 from PIL import ImageTk,Image
 from tkinter import messagebox
-import pymysql
+import pymongo
 
-# Add your own database name and password here to reflect in the code
-mypass = "root"
-mydatabase="db"
-
-con = pymysql.connect(host="localhost",user="root",password=mypass,database=mydatabase)
-cur = con.cursor()
-
-# Enter Table Names here
-issueTable = "books_issued" 
-bookTable = "books" #Book Table
+uri = "mongodb+srv://<username>:<password>@sandbox.ynusx.mongodb.net/admin?retryWrites=true&w=majority"
+myclient = pymongo.MongoClient(uri)
+database = myclient["endsem"]
 
 
-def deleteBook():
+def deleteprompt():
     
     bid = bookInfo1.get()
     
